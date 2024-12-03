@@ -9,6 +9,7 @@ https://docs.redhat.com/en/documentation/red_hat_build_of_quarkus/3.8/html-singl
 
 $ oc new-app registry.access.redhat.com/ubi8/openjdk-17~https://github.com/ggyaxxx/camel-route-job.git --name=camel-rotta
 
+$ oc start-build camel-rotta
 
 ## Crea la build config  
 
