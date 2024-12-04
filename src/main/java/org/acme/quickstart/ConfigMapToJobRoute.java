@@ -19,7 +19,6 @@ public class ConfigMapToJobRoute extends RouteBuilder {
                 .setHeader(KubernetesConstants.KUBERNETES_CONFIGMAP_NAME, constant("job-config"))
                 .to("kubernetes-config-maps://kubernetes.default.svc?operation=getConfigMap")
                 .log("Contenuto della ConfigMap: ${body}")
-
                 .process(exchange -> {
                     ConfigMap configMap = exchange.getMessage().getBody(ConfigMap.class);
                     if (configMap != null && configMap.getData() != null) {
@@ -31,11 +30,7 @@ public class ConfigMapToJobRoute extends RouteBuilder {
                             int randomNum = new Random().nextInt(9000) + 1000;
                             // Imposta il nome del Job con il numero casuale
                             job.getMetadata().setName(job.getMetadata().getName() + "-" + randomNum);
-                            int randomNumber = (int) (Math.random() * 9000) + 1000; // Genera un numero tra 1000 e 9999
-                            String jobName = "print-current-time-" + randomNumber;
-                            exchange.getMessage().setHeader(KubernetesConstants.KUBERNETES_JOB_NAME, jobName);
                             exchange.getMessage().setBody(job);
-
                         } else {
                             throw new RuntimeException("La chiave 'job-definition' non è presente nella ConfigMap");
                         }
@@ -44,9 +39,9 @@ public class ConfigMapToJobRoute extends RouteBuilder {
                     }
                 })
                 .log("Job definition extracted: ${body}")
-
                 .to("kubernetes-job://kubernetes.default.svc?operation=createJob")
-                .log("Job created successfully!");
+                .log("Job creato con successo!");
+
 
     }
     }
