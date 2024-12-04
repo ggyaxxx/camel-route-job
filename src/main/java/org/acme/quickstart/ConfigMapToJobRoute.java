@@ -11,7 +11,7 @@ public class ConfigMapToJobRoute extends RouteBuilder {
     public void configure() throws Exception {
 
         from("timer:configMapTimer?period=10000")
-                .setHeader(KubernetesConstants.KUBERNETES_NAMESPACE_NAME, constant("camel-route-job"))
+                .setHeader(KubernetesConstants.KUBERNETES_NAMESPACE_NAME, constant("camel-rotta"))
                 .setHeader(KubernetesConstants.KUBERNETES_CONFIGMAP_NAME, constant("job-config"))
                 .to("kubernetes-config-maps://kubernetes.default.svc?operation=getConfigMap")
                 .log("Contenuto della ConfigMap: ${body}");
