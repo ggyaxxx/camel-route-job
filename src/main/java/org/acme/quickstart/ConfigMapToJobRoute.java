@@ -29,7 +29,11 @@ public class ConfigMapToJobRoute extends RouteBuilder {
                             // Genera un numero casuale di 4 cifre
                             int randomNum = new Random().nextInt(9000) + 1000;
                             // Imposta il nome del Job con il numero casuale
-                            job.getMetadata().setName(job.getMetadata().getName() + "-" + randomNum);
+                            String jobName = job.getMetadata().getName() + "-" + randomNum;
+                            job.getMetadata().setName(jobName);
+                            // Imposta l'header con il nome del Job
+                            exchange.getMessage().setHeader(KubernetesConstants.KUBERNETES_JOB_NAME, jobName);
+                            // Imposta il corpo del messaggio come l'oggetto Job
                             exchange.getMessage().setBody(job);
                         } else {
                             throw new RuntimeException("La chiave 'job-definition' non è presente nella ConfigMap");
