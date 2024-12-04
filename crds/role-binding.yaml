@@ -6,7 +6,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: camel-job-sa
-    namespace: camel-route-job
+    namespace: camel-rotta
 roleRef:
   kind: Role
   name: configmap-and-job-manager
