@@ -14,10 +14,10 @@ public class ConfigMapToJobRoute extends RouteBuilder {
                 .setHeader(KubernetesConstants.KUBERNETES_NAMESPACE_NAME, constant("camel-rotta"))
                 .setHeader(KubernetesConstants.KUBERNETES_CONFIGMAP_NAME, constant("job-config"))
                 .to("kubernetes-config-maps://kubernetes.default.svc?operation=getConfigMap")
-                .log("Contenuto della ConfigMap: ${body}");
+                .log("Contenuto della ConfigMap: ${body}")
 
                 // Processa il contenuto della ConfigMap
-/*                .process(exchange -> {
+                .process(exchange -> {
                     Map<String, Object> body = exchange.getMessage().getBody(Map.class);
                     if (body != null && body.containsKey("data")) {
                         Map<String, String> data = (Map<String, String>) body.get("data");
@@ -31,7 +31,7 @@ public class ConfigMapToJobRoute extends RouteBuilder {
 
                 // Crea il Job su OpenShift
                 .to("kubernetes-job://kubernetes.default.svc?operation=createJob")
-                .log("Job created successfully!");*/
+                .log("Job created successfully!");
     }
     }
 
