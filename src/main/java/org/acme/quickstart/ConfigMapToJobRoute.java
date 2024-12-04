@@ -17,9 +17,9 @@ public class ConfigMapToJobRoute extends RouteBuilder {
                 .setHeader("CamelKubernetesNamespaceName", constant("camel-route-job"))
                 .setHeader("CamelKubernetesConfigMapName", constant("job-config"))
                 .to("kubernetes-config-maps://kubernetes.default.svc")
-                .log("ConfigMap fetched: ${body}")
+                .log("ConfigMap fetched: ${body}");
 
-                // Processa il corpo senza usare `simple`
+               /* // Processa il corpo senza usare `simple`
                 .process(exchange -> {
                     // Ottieni il corpo della risposta come mappa
                     Map<String, Object> body = exchange.getMessage().getBody(Map.class);
@@ -36,7 +36,7 @@ public class ConfigMapToJobRoute extends RouteBuilder {
                 // Crea il Job su OpenShift
                 .setHeader("CamelKubernetesNamespaceName", constant("camel-route-job"))
                 .to("kubernetes-job://kubernetes.default.svc?operation=createJob")
-                .log("Job created successfully!");
+                .log("Job created successfully!");*/
     }
     }
 
