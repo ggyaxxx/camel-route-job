@@ -56,7 +56,6 @@ public class ConfigMapToJobRoute extends RouteBuilder {
         PodSpec podSpec = new PodSpec();
         podSpec.setRestartPolicy("Never");
 
-        // Aggiungi il contenitore
         Container container = new Container();
         container.setName("print-time");
         container.setImage("registry.access.redhat.com/ubi8/ubi-minimal:latest");
@@ -64,13 +63,11 @@ public class ConfigMapToJobRoute extends RouteBuilder {
         container.setArgs(List.of("echo 'Current time: $(date)'"));
         podSpec.setContainers(List.of(container));
 
-        // Configura le metadata del pod
         ObjectMeta metadata = new ObjectMeta();
         metadata.setLabels(Map.of("app", "camel-job"));
         podTemplateSpec.setMetadata(metadata);
         podTemplateSpec.setSpec(podSpec);
 
-        // Configura lo `JobSpec`
         jobSpec.setTemplate(podTemplateSpec);
         jobSpec.setBackoffLimit(4);
 
