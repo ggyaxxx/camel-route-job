@@ -31,6 +31,9 @@ public class ConfigMapToJobRoute extends RouteBuilder {
                             int randomNum = new Random().nextInt(9000) + 1000;
                             // Imposta il nome del Job con il numero casuale
                             job.getMetadata().setName(job.getMetadata().getName() + "-" + randomNum);
+                            int randomNumber = (int) (Math.random() * 9000) + 1000; // Genera un numero tra 1000 e 9999
+                            String jobName = "print-current-time-" + randomNumber;
+                            exchange.getMessage().setHeader(KubernetesConstants.KUBERNETES_JOB_NAME, jobName);
                             exchange.getMessage().setBody(job);
 
                         } else {
