@@ -1,5 +1,6 @@
 package org.acme.quickstart;
 
+import io.fabric8.kubernetes.api.model.ConfigMap;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.kubernetes.KubernetesConstants;
 
@@ -18,13 +19,17 @@ public class ConfigMapToJobRoute extends RouteBuilder {
 
                 // Processa il contenuto della ConfigMap
                 .process(exchange -> {
-                    Map<String, Object> body = exchange.getMessage().getBody(Map.class);
-                    if (body != null && body.containsKey("data")) {
-                        Map<String, String> data = (Map<String, String>) body.get("data");
-                        String jobDefinition = data.get("job-definition");
-                        exchange.getMessage().setBody(jobDefinition);
+                    // Converti il body in un oggetto ConfigMap
+                    ConfigMap configMap = exchange.getMessage().getBody(ConfigMap.class);
+                    if (configMap != null && configMap.getData() != null) {
+                        String jobDefinition = configMap.getData().get("job-definition");
+                        if (jobDefinition != null) {
+                            exchange.getMessage().setBody(jobDefinition);
+                        } else {
+                            throw new RuntimeException("La chiave 'job-definition' non è presente nella ConfigMap");
+                        }
                     } else {
-                        throw new RuntimeException("ConfigMap data not found or invalid format");
+                        throw new RuntimeException("ConfigMap data non trovato o formato non valido");
                     }
                 })
                 .log("Job definition extracted: ${body}")
@@ -32,6 +37,7 @@ public class ConfigMapToJobRoute extends RouteBuilder {
                 // Crea il Job su OpenShift
                 .to("kubernetes-job://kubernetes.default.svc?operation=createJob")
                 .log("Job created successfully!");
+
     }
     }
 
