@@ -16,27 +16,22 @@ public class ConfigMapToJobRoute extends RouteBuilder {
                 .setHeader(KubernetesConstants.KUBERNETES_CONFIGMAP_NAME, constant("job-config"))
                 .to("kubernetes-config-maps://kubernetes.default.svc?operation=getConfigMap")
                 .log("Contenuto della ConfigMap: ${body}")
-
-                // Processa il contenuto della ConfigMap
                 .process(exchange -> {
-                    // Converti il body in un oggetto ConfigMap
-                    ConfigMap configMap = exchange.getMessage().getBody(ConfigMap.class);
-                    if (configMap != null && configMap.getData() != null) {
-                        String jobDefinition = configMap.getData().get("job-definition");
-                        if (jobDefinition != null) {
-                            exchange.getMessage().setBody(jobDefinition);
-                        } else {
-                            throw new RuntimeException("La chiave 'job-definition' non è presente nella ConfigMap");
-                        }
+                    Map<String, Object> body = exchange.getMessage().getBody(Map.class);
+                    if (body != null && body.containsKey("data")) {
+                        Map<String, String> data = (Map<String, String>) body.get("data");
+                        String jobDefinition = data.get("job-definition");
+                        exchange.getMessage().setBody(jobDefinition);
+                        String jobName = "nome-del-job";
+                        exchange.getMessage().setHeader(KubernetesConstants.KUBERNETES_JOB_NAME, jobName);
                     } else {
-                        throw new RuntimeException("ConfigMap data non trovato o formato non valido");
+                        throw new RuntimeException("ConfigMap data not found or invalid format");
                     }
                 })
-                .log("Job definition extracted: ${body}")
-
-                // Crea il Job su OpenShift
+                .log("Definizione del Job estratta: ${body}")
                 .to("kubernetes-job://kubernetes.default.svc?operation=createJob")
-                .log("Job created successfully!");
+                .log("Job creato con successo!");
+
 
     }
     }
