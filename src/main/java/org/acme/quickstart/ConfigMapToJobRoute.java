@@ -1,10 +1,13 @@
 package org.acme.quickstart;
 
 import io.fabric8.kubernetes.api.model.ConfigMap;
+import io.fabric8.kubernetes.api.model.batch.v1.Job;
+import io.fabric8.kubernetes.client.utils.Serialization;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.kubernetes.KubernetesConstants;
 
 import java.util.Map;
+import java.util.Random;
 
 public class ConfigMapToJobRoute extends RouteBuilder {
 
@@ -22,10 +25,13 @@ public class ConfigMapToJobRoute extends RouteBuilder {
                     if (configMap != null && configMap.getData() != null) {
                         String jobDefinition = configMap.getData().get("job-definition");
                         if (jobDefinition != null) {
-                            exchange.getMessage().setBody(jobDefinition);
-                            int randomNumber = (int) (Math.random() * 9000) + 1000;
-                            String jobName = "print-current-time-" + randomNumber;
-                            exchange.getMessage().setHeader(KubernetesConstants.KUBERNETES_JOB_NAME, jobName);
+                            // Deserializza la definizione del Job YAML in un oggetto Job
+                            Job job = Serialization.unmarshal(jobDefinition, Job.class);
+                            // Genera un numero casuale di 4 cifre
+                            int randomNum = new Random().nextInt(9000) + 1000;
+                            // Imposta il nome del Job con il numero casuale
+                            job.getMetadata().setName(job.getMetadata().getName() + "-" + randomNum);
+                            exchange.getMessage().setBody(job);
 
                         } else {
                             throw new RuntimeException("La chiave 'job-definition' non è presente nella ConfigMap");
