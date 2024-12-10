@@ -51,7 +51,6 @@ public class ConfigMapToJobRoute extends RouteBuilder {
     private JobSpec generateJobSpec() {
         JobSpec jobSpec = new JobSpec();
 
-        // Configura lo `PodTemplateSpec`
         PodTemplateSpec podTemplateSpec = new PodTemplateSpec();
         PodSpec podSpec = new PodSpec();
         podSpec.setRestartPolicy("Never");
