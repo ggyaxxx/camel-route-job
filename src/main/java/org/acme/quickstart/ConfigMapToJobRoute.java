@@ -13,7 +13,7 @@ public class ConfigMapToJobRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
 
-        from("timer:cronJobTimer?period=30000") // Esegue ogni 30 secondi
+        from("timer:cronJobTimer?period=5000") // Esegue ogni 30 secondi
                 .setHeader(KubernetesConstants.KUBERNETES_NAMESPACE_NAME, constant("camel-rotta"))
                 .setHeader(KubernetesConstants.KUBERNETES_CRON_JOB_NAME, constant("camel-cronjob"))
                 .to("kubernetes-cronjob://kubernetes.default.svc?operation=getCronJob")
