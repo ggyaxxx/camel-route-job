@@ -20,7 +20,7 @@ public class ConfigMapYamlJobRoute extends RouteBuilder {
                 .routeId("kubernetes-yaml-job")
                 .process(exchange -> {
                     try (KubernetesClient client = new KubernetesClientBuilder().build()) {
-                        // Recupera la ConfigMap dal cluster Kubernetes
+                        // Recupera la ConfigMap dal cluster
                         ConfigMap configMap = client.configMaps()
                                 .inNamespace("camel-rotta")
                                 .withName("job-config")
@@ -30,24 +30,35 @@ public class ConfigMapYamlJobRoute extends RouteBuilder {
                             throw new RuntimeException("ConfigMap o chiave 'job-definition' non trovata!");
                         }
 
-                        // Recupera la definizione YAML del Job dalla ConfigMap
+                        // Estrai il contenuto della chiave 'job-definition'
                         String jobYamlString = configMap.getData().get("job-definition");
+                        if (jobYamlString == null || jobYamlString.trim().isEmpty()) {
+                            throw new RuntimeException("Il contenuto di 'job-definition' è vuoto!");
+                        }
+
+                        // Convertilo in un InputStream
                         ByteArrayInputStream jobYamlStream = new ByteArrayInputStream(jobYamlString.getBytes(StandardCharsets.UTF_8));
 
                         // Carica il Job dallo YAML
                         Job job = client.batch().v1().jobs().load(jobYamlStream).get();
 
+                        if (job == null) {
+                            throw new RuntimeException("Il Job YAML non è valido o non è stato parsato correttamente!");
+                        }
+
                         // Genera un nome unico per il Job
                         String jobName = "manual-trigger-" + System.currentTimeMillis();
+                        if (job.getMetadata() == null) {
+                            job.setMetadata(new io.fabric8.kubernetes.api.model.ObjectMeta());
+                        }
                         job.getMetadata().setName(jobName);
 
                         // Passa il Job nel corpo dell'exchange
                         exchange.getMessage().setBody(job);
-
-                        // Imposta il namespace
                         exchange.getMessage().setHeader(KubernetesConstants.KUBERNETES_NAMESPACE_NAME, "camel-rotta");
                     }
                 })
+
                 .to("kubernetes-job://kubernetes.default.svc?operation=" + KubernetesOperations.CREATE_JOB_OPERATION) // Crea il Job
                 .log("Job creato con successo: ${header." + KubernetesConstants.KUBERNETES_JOB_NAME + "}");
     }
