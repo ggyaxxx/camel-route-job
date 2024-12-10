@@ -20,7 +20,7 @@ public class ConfigMapYamlJobRoute extends RouteBuilder {
                 .routeId("kubernetes-yaml-job")
                 .process(exchange -> {
                     try (KubernetesClient client = new KubernetesClientBuilder().build()) {
-                        // Recupera la ConfigMap dal cluster Kubernetes
+                        // Recupera la ConfigMap dal cluster
                         ConfigMap configMap = client.configMaps()
                                 .inNamespace("camel-rotta")
                                 .withName("job-config")
@@ -30,7 +30,7 @@ public class ConfigMapYamlJobRoute extends RouteBuilder {
                             throw new RuntimeException("ConfigMap o chiave 'job-definition' non trovata!");
                         }
 
-                        // Recupera il contenuto YAML dalla chiave 'job-definition'
+                        // Estrai il contenuto YAML dalla chiave 'job-definition'
                         String jobYamlString = configMap.getData().get("job-definition");
 
                         if (jobYamlString == null || jobYamlString.trim().isEmpty()) {
@@ -53,6 +53,7 @@ public class ConfigMapYamlJobRoute extends RouteBuilder {
 
                         // Passa il Job nel corpo dell'exchange
                         exchange.getMessage().setBody(job);
+                        exchange.getMessage().setHeader(KubernetesConstants.KUBERNETES_JOB_NAME, jobName);
                         exchange.getMessage().setHeader(KubernetesConstants.KUBERNETES_NAMESPACE_NAME, "camel-rotta");
                     }
                 })
