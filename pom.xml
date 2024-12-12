@@ -76,7 +76,7 @@
     <dependency>
       <groupId>io.fabric8</groupId>
       <artifactId>kubernetes-client</artifactId>
-      <version>6.13.3.redhat-00002</version>
+      <version>6.1.1</version>
     </dependency>
 
 
