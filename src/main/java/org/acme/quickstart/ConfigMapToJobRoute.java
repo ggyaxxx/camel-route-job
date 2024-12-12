@@ -23,7 +23,7 @@ public class ConfigMapToJobRoute extends RouteBuilder {
                 .process(exchange -> {
                     ConfigMap configMap = exchange.getMessage().getBody(ConfigMap.class);
                     if (configMap != null && configMap.getData() != null) {
-                        String jobYaml = configMap.getData().get("job.yaml"); // Assume la chiave nella ConfigMap
+                        String jobYaml = configMap.getData().get("job-definition");
                         if (jobYaml != null) {
                             try (KubernetesClient client = new KubernetesClientBuilder().build()) {
                                 Job job = Serialization.unmarshal(jobYaml, Job.class);
@@ -35,7 +35,7 @@ public class ConfigMapToJobRoute extends RouteBuilder {
                                 throw new RuntimeException("Errore durante la creazione del Job", e);
                             }
                         } else {
-                            throw new RuntimeException("La chiave 'job.yaml' non è presente nella ConfigMap");
+                            throw new RuntimeException("La chiave 'job-definition' non è presente nella ConfigMap");
                         }
                     } else {
                         throw new RuntimeException("ConfigMap non trovato o dati mancanti");
