@@ -5,11 +5,13 @@ import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.utils.Serialization;
 import org.apache.camel.builder.RouteBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ConfigMapToJobRoute extends RouteBuilder {
 
+    @Autowired
     private final KubernetesClient kubernetesClient;
 
     public ConfigMapToJobRoute(KubernetesClient kubernetesClient) {
