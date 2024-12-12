@@ -80,10 +80,10 @@
     </dependency>
 
 
-    <dependency>
+ <!--   <dependency>
       <groupId>org.apache.camel.springboot</groupId>
       <artifactId>camel-kubernetes-starter</artifactId>
-    </dependency>
+    </dependency>-->
 
     <!-- Test -->
     <dependency>
