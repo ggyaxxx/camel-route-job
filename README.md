@@ -7,5 +7,9 @@ https://docs.redhat.com/en/documentation/red_hat_build_of_quarkus/3.8/html-singl
 
 $ oc new-app registry.access.redhat.com/ubi8/openjdk-17~https://github.com/ggyaxxx/camel-route-job.git#kubernetes-client --name=camel-rotta
 
+The above command creates a buildconfig, if there is a code change restart the build and update the image in the deployment file
+
+
+
 $ oc start-build camel-rotta --follow
 
