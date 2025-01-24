@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: job-config
+  namespace: camel-rotta
+data:
+  job-definition: |
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: print-current-time
+    spec:
+      backoffLimit: 6
+      template:
+        spec:
+          containers:
+          - name: print-time
+            image: registry.access.redhat.com/ubi8/ubi-minimal:latest
+            command: ["/bin/sh", "-c"]
+            args:
+            - |
+              echo "Current time: $(date)"
+            resources:
+              requests:
+                memory: "64Mi"
+                cpu: "100m"
+              limits:
+                memory: "128Mi"
+                cpu: "200m"
+            imagePullPolicy: Always
+          restartPolicy: Never

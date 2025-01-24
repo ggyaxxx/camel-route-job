@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: camel-rotta
+  namespace: camel-rotta
+  labels:
+    app: camel-rotta
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: camel-rotta
+  template:
+    metadata:
+      labels:
+        app: camel-rotta
+    spec:
+      serviceAccountName: camel-job-sa
+      containers:
+        - name: camel-rotta
+          image: 'image-registry.openshift-image-registry.svc:5000/camel-rotta/camel-rotta@sha256:8ee31cee364d18bc5789133701b24b7410b85462ec6d866efb3f91a70b798e74'
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 8443
+              protocol: TCP
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
