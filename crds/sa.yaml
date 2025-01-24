@@ -3,5 +3,3 @@ kind: ServiceAccount
 metadata:
   name: camel-job-sa
   namespace: camel-rotta
-imagePullSecrets:
-  - name: default-dockercfg-kf567
