@@ -1,5 +1,7 @@
 # S2I
 
+As a first step, create the configmap cr in the crds/ folder. The namespace ~camel-rotta~ is hardwired in the code, so use that one.
+
 
  # Strategia documentata
 
