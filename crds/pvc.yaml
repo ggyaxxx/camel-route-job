@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: static-hostpath-volume-rwx-pvc
+metadata:
+  name: static-hostpath-volume-rwx-pvc
+  namespace: camel-rotta
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: static-hostpath-volume-rwx-pvc
