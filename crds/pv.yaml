@@ -12,5 +12,5 @@ spec:
   volumeMode: Filesystem
   storageClassName: ""  # esplicitamente vuoto per matchare PVC
   hostPath:
-    path: /tmp/shared-data
+    path: /opt/shared-data
     type: ""
