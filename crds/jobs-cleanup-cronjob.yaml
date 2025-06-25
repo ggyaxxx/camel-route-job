@@ -4,7 +4,7 @@ metadata:
   name: cleanup-jobs
   namespace: camel-rotta
 spec:
-  schedule: '* * * * *'
+  schedule: '0 0 * * *'
   jobTemplate:
     spec:
       template:
