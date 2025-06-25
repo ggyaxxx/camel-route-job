@@ -2,6 +2,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: shared-pv
+  namespace: camel-rotta
 spec:
   capacity:
     storage: 2Gi
@@ -11,5 +12,5 @@ spec:
   volumeMode: Filesystem
   storageClassName: ""  # esplicitamente vuoto per matchare PVC
   hostPath:
-    path: /tmp
+    path: /tmp/shared-data
     type: ""

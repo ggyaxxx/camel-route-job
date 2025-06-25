@@ -20,7 +20,7 @@ public class ConfigMapToJobRoute extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        from("timer:configMapTimer?period=10000")
+        from("timer:configMapTimer?period=60000")
                 .log("Fetching ConfigMap from Kubernetes...")
                 .process(exchange -> {
                     // Recupera la ConfigMap
