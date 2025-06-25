@@ -17,4 +17,4 @@ The above command creates a buildconfig, if there is a code change restart the b
         $ oc set sa deployment/camel-rotta camel-job-sa 
 * Assign the storage
 
-        $ oc set volumes deployment/camel-rotta --path /tmp/shared --add --claim-name static-hostpath-volume-rwx-pvc
+        $ oc set volumes deployment/camel-rotta --path /tmp/shared --add --claim-name shared-pvc --name shared-volume
