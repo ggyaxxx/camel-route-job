@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cleanup-jobs
+  namespace: camel-rotta
+spec:
+  schedule: '* * * * *'
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: camel-job-sa
+          containers:
+            - name: job-cleaner
+              image: registry.redhat.io/openshift4/ose-cli
+              args:
+                - /bin/sh
+                - '-c'
+                - 'oc delete jobs --all'
+          serviceAccount: camel-job-sa
+          restartPolicy: OnFailure

@@ -9,4 +9,4 @@ rules:
     verbs: ["get", "list"]
   - apiGroups: ["batch"]
     resources: ["jobs"]
-    verbs: ["create", "get", "list", "watch"]
+    verbs: ["create", "get", "list", "watch", "delete", "deleteCollection"]

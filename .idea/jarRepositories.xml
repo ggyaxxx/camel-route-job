@@ -7,9 +7,19 @@
       <option name="url" value="https://repo.maven.apache.org/maven2" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="jboss-ga-repository" />
+      <option name="name" value="jboss-ga-repository" />
+      <option name="url" value="https://maven.repository.redhat.com/techpreview/all" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="red-hat-enterprise-maven-repository" />
       <option name="name" value="red-hat-enterprise-maven-repository" />
       <option name="url" value="https://maven.repository.redhat.com/ga/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="red-hat-ga" />
+      <option name="name" value="red-hat-ga" />
+      <option name="url" value="https://maven.repository.redhat.com/ga" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="central" />
@@ -20,6 +30,11 @@
       <option name="id" value="jboss.community" />
       <option name="name" value="JBoss Community repository" />
       <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="jboss-earlyaccess-repository" />
+      <option name="name" value="jboss-earlyaccess-repository" />
+      <option name="url" value="https://maven.repository.redhat.com/earlyaccess/all/" />
     </remote-repository>
   </component>
 </project>
