@@ -17,7 +17,13 @@ The above command creates a buildconfig, if there is a code change restart the b
         $ oc set sa deployment/camel-rotta camel-job-sa 
   * Assign the storage
 
-          $ oc set volumes deployment/camel-rotta --mount-path /tmp/shared --add --claim-name shared-pvc --name shared-volume
+          $ oc set volume deployment/camel-rotta \
+              --add \
+              --name shared-volume \
+              --type pvc \
+              --claim-name shared-pvc \
+              --mount-path /mnt/shared
+
 
 * (OPTIONAL) Assign scc privileged to sa for hostpath mount
 
