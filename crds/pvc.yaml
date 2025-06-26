@@ -5,10 +5,8 @@ metadata:
   namespace: camel-rotta
 spec:
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
-  volumeMode: Filesystem
-  storageClassName: ""
-  volumeName: shared-pv
+      storage: 2Gi
+  storageClassName: thin-csi
