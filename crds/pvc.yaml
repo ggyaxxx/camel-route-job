@@ -5,8 +5,8 @@ metadata:
   namespace: camel-rotta
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 2Gi
-  storageClassName: thin-csi
+  storageClassName: nfs-storage

@@ -17,13 +17,14 @@ The above command creates a buildconfig, if there is a code change restart the b
         $ oc set sa deployment/camel-rotta camel-job-sa 
   * Assign the storage
 
-          $ oc set volume deployment/camel-rotta \
-              --add \
-              --name tmp-volume \
-              --type hostPath \
-              --path /tmp \
-              --mount-path /tmp
+          $ oc set volumes deployment/camel-rotta --mount-path /tmp/shared --add --claim-name shared-pvc --name shared-volume
 
-* Assign scc privileged to sa for hostpath mount
+* (OPTIONAL) Assign scc privileged to sa for hostpath mount
 
-       oc adm policy add-scc-to-user privileged -z camel-job-sa -n camel-rotta
+       $ oc adm policy add-scc-to-user privileged -z camel-job-sa -n camel-rotta
+
+
+* (MANDATORY) if creating an nfs provider
+
+      $ oc adm policy add-scc-to-user hostmount-anyuid -z nfs-client-provisioner -n nfs-provisioner
+
