@@ -27,10 +27,19 @@ public class ConfigMapToJobRoute extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        from("timer:configMapTimer?period=60000")
-                .log("Fetching ConfigMap from Kubernetes...")
+        from("file:" + inputDirectory +
+                "?preMove=" + processingDirectory + "/${file:name}" +
+                "&readLock=changed" +
+                "&readLockCheckInterval=1000" +
+                "&readLockMinLength=1" +
+                "&readLockMinAge=2000" +
+                "&delete=false" +
+                "&noop=true" +
+                "&initialDelay=1000&delay=5000")
+
+                .log("File rilevato: ${header.CamelFileNameOriginal}")
+                .log("Pre-mosso in: " + processingDirectory)
                 .process(exchange -> {
-                    // Recupera la ConfigMap
                     ConfigMap configMap = kubernetesClient.configMaps()
                             .inNamespace("camel-rotta")
                             .withName("job-config")
@@ -40,7 +49,9 @@ public class ConfigMapToJobRoute extends RouteBuilder {
                         String jobYaml = configMap.getData().get("job-definition");
                         if (jobYaml != null) {
                             Job job = Serialization.unmarshal(jobYaml, Job.class);
-                            job.getMetadata().setName("camel-job-" + (int) (Math.random() * 9000 + 1000));
+                            String fileName = exchange.getIn().getHeader("CamelFileName", String.class);
+                            String jobName = "camel-job-" + fileName.replaceAll("\\W+", "-").toLowerCase() + "-" + (int) (Math.random() * 9000 + 1000);
+                            job.getMetadata().setName(jobName);
                             job.getMetadata().setNamespace("camel-rotta");
 
                             kubernetesClient.batch().v1().jobs()
@@ -56,22 +67,6 @@ public class ConfigMapToJobRoute extends RouteBuilder {
                     }
                 })
                 .log("${body}");
-
-        from("file:" + inputDirectory +
-                "?preMove=" + processingDirectory + "/${file:name}" +
-                "&readLock=changed" +
-                "&readLockCheckInterval=1000" +
-                "&readLockMinLength=1" +
-                "&readLockMinAge=2000" +
-                "&delete=false" +
-                "&noop=true" +
-                "&initialDelay=1000&delay=5000")
-
-                .log("File originale ${header.CamelFileNameOriginal} pre-mosso in: " + processingDirectory)
-                .log("Inizio processamento per il file: ${header.CamelFilePath}") // CamelFilePath punta al file in processingDirectory
-
-
-                .log("Avvio del job Kubernetes per il file ${header.CamelFileNameOriginal}");
 
     }
 }
