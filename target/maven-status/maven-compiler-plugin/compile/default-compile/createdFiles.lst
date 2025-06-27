@@ -1,0 +1,5 @@
+com/example/MySpringBean.class
+com/example/MySpringBootApplication.class
+com/example/ConfigMapToJobRoute.class
+com/example/KubernetesClientConfig.class
+com/example/IdempotentRepository.class

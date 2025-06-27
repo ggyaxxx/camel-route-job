@@ -28,17 +28,17 @@ public class ConfigMapToJobRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         from("file:" + inputDirectory +
-                "?preMove=" + processingDirectory + "/${file:name}" +
-                "&readLock=changed" +
-                "&readLockCheckInterval=1000" +
-                "&readLockMinLength=1" +
-                "&readLockMinAge=2000" +
-                "&delete=false" +
+                "?excludeExt=sh,sql,ctl,split" +
+                "&exclude=.*UCEWL.*|ID_.*" +
+                "&keepLastModified=true" +
+                "&readLock=none" +
                 "&noop=true" +
+                "&idempotentKey=${file:name}-${file:modified}" +
+                "&idempotentRepository=#myFileRepository" +
                 "&initialDelay=1000&delay=5000")
 
                 .log("File rilevato: ${header.CamelFileNameOriginal}")
-                .log("Pre-mosso in: " + processingDirectory)
+//                .log("Pre-mosso in: " + processingDirectory)
                 .process(exchange -> {
                     ConfigMap configMap = kubernetesClient.configMaps()
                             .inNamespace("camel-rotta")

@@ -34,3 +34,8 @@ The above command creates a buildconfig, if there is a code change restart the b
 
       $ oc adm policy add-scc-to-user hostmount-anyuid -z nfs-client-provisioner -n nfs-provisioner
 
+* Locally start the app with the dev profile
+
+      $ mvn spring-boot:run -Dspring-boot.run.profiles=dev
+
+
