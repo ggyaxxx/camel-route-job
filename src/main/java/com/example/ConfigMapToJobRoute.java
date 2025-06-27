@@ -34,8 +34,7 @@ public class ConfigMapToJobRoute extends RouteBuilder {
                 "&readLock=none" +
                 "&noop=true" +
                 "&idempotentKey=${file:name}-${file:modified}" +
-                "&idempotentRepository=#myFileRepository" +
-                "&initialDelay=1000&delay=5000")
+                "&idempotentRepository=#myFileRepository" )
 
                 .log("File rilevato: ${header.CamelFileNameOriginal}")
 //                .log("Pre-mosso in: " + processingDirectory)

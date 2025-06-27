@@ -38,4 +38,14 @@ The above command creates a buildconfig, if there is a code change restart the b
 
       $ mvn spring-boot:run -Dspring-boot.run.profiles=dev
 
+* Script to generate 10 files in the shared folder
+
+#!/bin/bash
+
+      for i in {1..10}; do
+          timestamp=$(date +%s%3N)  # %3N = millisecondi
+          touch "prova-${timestamp}.txt"
+          sleep 0.1  # piccola pausa per garantire timestamp diversi
+      done
+
 
