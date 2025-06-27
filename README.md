@@ -48,4 +48,11 @@ The above command creates a buildconfig, if there is a code change restart the b
           sleep 0.1  # piccola pausa per garantire timestamp diversi
       done
 
+* Script to generate job only a number of times
+
+      for i in {1..10}; do
+        echo "Esecuzione $i..."
+        oc apply -f crds/only-the-job.yaml
+      done
+
 
