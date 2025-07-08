@@ -1,6 +1,6 @@
 {
 	"auths": {
-		"default-route-openshift-image-registry.apps.dscrimieocp4.vmware.tamlab.rdu2.redhat.com": {
+		"image-registry.openshift-image-registry.svc:5000": {
 			"auth": "YWRtaW46c2hhMjU2fkpXSWVUVEhQVDVHMWpSV0l2SUJXSjl5cXJzMUZfTWFsQ0JkX2xEVGJLUHc="
 		}
 	}
